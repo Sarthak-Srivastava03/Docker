@@ -1,0 +1,13 @@
+# Dockerfile.distroless
+# Stage 1: Builder with JDK
+FROM openjdk:17-jdk-slim AS builder    # Full JDK for compilation :contentReference[oaicite:4]{index=4}
+WORKDIR /app
+COPY . .
+RUN javac TicTacToe.java              # Produce TicTacToe.class
+
+# Stage 2: Distroless runtime
+FROM gcr.io/distroless/java17-debian12 # Java17 runtime only (~49 MB) :contentReference[oaicite:5]{index=5}
+WORKDIR /app
+COPY --from=builder /app/TicTacToe.class ./     # Only the compiled class
+COPY --from=builder /app/*.class ./             # All classes if multiple
+ENTRYPOINT ["java", "TicTacToe"]                # Run the game
