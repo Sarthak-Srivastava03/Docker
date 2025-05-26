@@ -1,0 +1,6 @@
+# Dockerfile.single
+FROM openjdk:17-jdk-slim      # Full JDK (~600 MB) :contentReference[oaicite:1]{index=1}
+WORKDIR /app
+COPY . .                      # App source copied in
+RUN javac TicTacToe.java      # Compile inside final image
+CMD ["java", "TicTacToe"]     # Run the game
